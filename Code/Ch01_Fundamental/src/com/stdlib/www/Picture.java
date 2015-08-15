@@ -61,7 +61,8 @@ import javax.swing.KeyStroke;
  *  @author Kevin Wayne
  */
 public final class Picture implements ActionListener {
-    private BufferedImage image;               // the rasterized image
+	//一张照片picture有以下参数：image，frame，filename，location of origin， width，height。
+    private BufferedImage image;               // the rasterized image光栅化之后的照片
     private JFrame frame;                      // on-screen view
     private String filename;                   // name of file
     private boolean isOriginUpperLeft = true;  // location of origin
@@ -70,6 +71,7 @@ public final class Picture implements ActionListener {
    /**
      * Initializes a blank <tt>width</tt>-by-<tt>height</tt> picture, with <tt>width</tt> columns
      * and <tt>height</tt> rows, where each pixel is black.
+     * 根据width，height来初始化照片,该照片是黑色的
      */
     public Picture(int width, int height) {
         if (width  < 0) throw new IllegalArgumentException("width must be nonnegative");
@@ -85,10 +87,13 @@ public final class Picture implements ActionListener {
      * Initializes a new picture that is a deep copy of <tt>picture</tt>.
      */
     public Picture(Picture picture) {
-        width  = picture.width();
+        //复制这张照片的width和height
+    	width  = picture.width();
         height = picture.height();
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        //复制这张照片的filename
         filename = picture.filename;
+        //复制这张照片的每个像素点的RGB值
         for (int col = 0; col < width(); col++)
             for (int row = 0; row < height(); row++)
                 image.setRGB(col, row, picture.get(col, row).getRGB());
@@ -98,16 +103,19 @@ public final class Picture implements ActionListener {
      * Initializes a picture by reading in a .png, .gif, or .jpg from
      * the given filename or URL name.
      */
+    //根据文件名来读取图片
     public Picture(String filename) {
         this.filename = filename;
         try {
             // try to read from file in working directory
+        	//根据ImageIO的方法来读取图片
             File file = new File(filename);
             if (file.isFile()) {
                 image = ImageIO.read(file);
             }
 
             // now try to read from file in same directory as this .class file
+            //路径名如果不对，就在工作空间中搜索文件名filename
             else {
                 URL url = getClass().getResource(filename);
                 if (url == null) {
@@ -127,6 +135,7 @@ public final class Picture implements ActionListener {
    /**
      * Initializes a picture by reading in a .png, .gif, or .jpg from a File.
      */
+    //根据路径名来读取图片
     public Picture(File file) {
         try {
             image = ImageIO.read(file);
@@ -148,6 +157,7 @@ public final class Picture implements ActionListener {
      * JFrame or other GUI widget.
      * @return the <tt>JLabel</tt>
      */
+    //读取路径名作为标签名JLabel
     public JLabel getJLabel() {
         if (image == null) return null;         // no image available
         ImageIcon icon = new ImageIcon(image);
@@ -174,9 +184,11 @@ public final class Picture implements ActionListener {
     public void show() {
 
         // create the GUI for viewing the image if needed
+    	//创建框架，框架中包括目录，
         if (frame == null) {
             frame = new JFrame();
 
+            //JMenuBar目录按钮,JMenu目录名,JMenuItem目录条目,
             JMenuBar menuBar = new JMenuBar();
             JMenu menu = new JMenu("File");
             menuBar.add(menu);
@@ -189,12 +201,15 @@ public final class Picture implements ActionListener {
 
 
 
+            //对frame的面板进行设置，其中包括退出设置，title，
             frame.setContentPane(getJLabel());
             // f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setTitle(filename);
             frame.setResizable(false);
+            //picture与frame相适应
             frame.pack();
+            //frame是否可见
             frame.setVisible(true);
         }
 
@@ -224,6 +239,7 @@ public final class Picture implements ActionListener {
      * @throws IndexOutOfBoundsException unless both 0 &le; <tt>col</tt> &lt; <tt>width</tt>
      * and 0 &le; <tt>row</tt> &lt; <tt>height</tt>
      */
+    //找到坐标为（col,row）的像素点的Color类型
     public Color get(int col, int row) {
         if (col < 0 || col >= width())  throw new IndexOutOfBoundsException("col must be between 0 and " + (width()-1));
         if (row < 0 || row >= height()) throw new IndexOutOfBoundsException("row must be between 0 and " + (height()-1));
@@ -251,15 +267,19 @@ public final class Picture implements ActionListener {
      * and if all pixels have the same color
      */
     public boolean equals(Object other) {
-        if (other == this) return true;
+        //对 runtime class进行比比较
+    	if (other == this) return true;
         if (other == null) return false;
         if (other.getClass() != this.getClass()) return false;
         Picture that = (Picture) other;
+        //对尺寸进行比较
         if (this.width()  != that.width())  return false;
         if (this.height() != that.height()) return false;
+        //对每个像素进行比较
         for (int col = 0; col < width(); col++)
             for (int row = 0; row < height(); row++)
                 if (!this.get(col, row).equals(that.get(col, row))) return false;
+        //else
         return true;
     }
 
