@@ -1168,19 +1168,24 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
      * Test client.
      */
     public static void main(String[] args) {
-        StdDraw.square(.2, .8, .1);
+        //画一个正方形，中心点坐标为（0.2，0.8），半径为0.2
+    	StdDraw.square(.2, .8, .1);
+    	//画一个方块，中心点坐标为（0.8，0.8），半径为0.2
         StdDraw.filledSquare(.8, .8, .2);
+        //画一个圆，圆心坐标为（0.8，0.2），半径为0.2
         StdDraw.circle(.8, .2, .2);
 
+        //设置画笔的颜色为BOOK_RED，半径为0.02，画一条弧段，其圆心为（0.8，0.2），半径为0.1，逆时针方向转，X轴正方向为0°
         StdDraw.setPenColor(StdDraw.BOOK_RED);
         StdDraw.setPenRadius(.02);
-        StdDraw.arc(.8, .2, .1, 200, 45);
+        StdDraw.arc(.8, .2, .1, 0, 180);
 
         // draw a blue diamond
         StdDraw.setPenRadius();
-        StdDraw.setPenColor(StdDraw.BOOK_BLUE);
+        StdDraw.setPenColor(StdDraw.YELLOW);
         double[] x = { .1, .2, .3, .2 };
         double[] y = { .2, .3, .2, .1 };
+        //填充一个多边形，确定好点位坐标即可
         StdDraw.filledPolygon(x, y);
 
         // text

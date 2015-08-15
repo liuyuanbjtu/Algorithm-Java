@@ -8,3 +8,5 @@ main函数中输入1 2 3 4 5；
 
 3.In.java
 第485行，current directory的使用方法？
+
+4、StdDraw.java与Draw.java的主函数在分别调用Draw和StdDraw类上存在差异，为什么会有这种差异？
